@@ -1,6 +1,6 @@
 import style from './style.module.css';
 
-const Layout = ({ colorBg, title, descr, urlBg }) => {
+const Layout = ({ colorBg, title, descr, urlBg, children }) => {
     const rootStyles = {
         ...(colorBg && { backgroundColor: colorBg }),
         ...(urlBg && { backgroundImage: `url(${urlBg})` }),
@@ -18,6 +18,7 @@ const Layout = ({ colorBg, title, descr, urlBg }) => {
                     </div>
                     <div className={`${style.desc} ${style.full}`}>
                         { descr && (<p>{descr}</p>) }
+                        { children }
                     </div>
                 </article>
             </div>
