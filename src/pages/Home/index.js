@@ -8,12 +8,13 @@ import bg3 from '../../assets/bg3.jpg';
 import POKEMONS from '../../assets/pokemon.json';
 import PokemonCard from '../../components/PokemonCard';
 
-function Home() {
+const Home = ({ onPageChange }) => {
   return (
     <>
       <Header
         title="Pokemon game"
         descr="Some description"
+        onPageChange={onPageChange}
       />
       <Layout
         title="Game rules"
