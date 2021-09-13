@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import style from './style.module.css';
 
 const Layout = ({ colorBg, title, descr, urlBg, children }) => {
@@ -16,7 +17,7 @@ const Layout = ({ colorBg, title, descr, urlBg, children }) => {
                         { title && (<h3>{title}</h3>) }
                         <span className="separator"></span>
                     </div>
-                    <div className={`${style.desc} ${style.full}`}>
+                    <div className={cn(style.desc, style.full)}>
                         { descr && (<p>{descr}</p>) }
                         { children }
                     </div>
