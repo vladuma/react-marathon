@@ -1,8 +1,8 @@
-
+import constants from '../../constants';
 import style from './style.module.css';
 import cn from 'classnames';
 
-const Menu = ({ isActive }) => {
+const Menu = ({ isActive, onPageChange }) => {
     return (
         <div
             className={cn(style.menuContainer, (isActive ? style.active : style.deactive))}
@@ -11,22 +11,22 @@ const Menu = ({ isActive }) => {
             <div className={style.menuItems}>
                 <ul>
                     <li>
-                        <a href="#welcome">
+                        <a onClick={() => onPageChange(constants.HOME_PAGE_SLUG)}>
                         HOME
                         </a>
                     </li>
                     <li>
-                        <a href="#game">
+                        <a onClick={() => onPageChange(constants.GAME_PAGE_SLUG)}>
                         GAME
                         </a>
                     </li>
                     <li>
-                        <a href="#about">
+                        <a onClick={() => onPageChange(constants.DEFAULT_PAGE_SLUG)}>
                         ABOUT
                         </a>
                     </li>
                     <li>
-                        <a href="#contact">
+                        <a onClick={() => onPageChange(constants.DEFAULT_PAGE_SLUG)}>
                         CONTACT
                         </a>
                     </li>

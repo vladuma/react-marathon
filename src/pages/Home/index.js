@@ -12,11 +12,12 @@ import PokemonCard from '../../components/PokemonCard';
 const Home = ({ onPageChange }) => {
   return (
     <>
-        <MenuHeader />
+        <MenuHeader
+            onPageChange={onPageChange}
+        />
         <Header
             title="Pokemon game"
             descr="Some description"
-            onPageChange={onPageChange}
         />
         <Layout
             title="Game rules"
