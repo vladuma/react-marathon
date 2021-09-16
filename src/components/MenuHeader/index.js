@@ -4,7 +4,7 @@ import Menu from '../Menu';
 import NavBar from '../NavBar';
 
 const MenuHeader = ({ onPageChange }) => {
-    const [isActive, setActive] = useState(false);
+    const [isActive, setActive] = useState(null);
     const toggleNav = () => setActive(!isActive);
 
     return (

@@ -3,9 +3,13 @@ import style from './style.module.css';
 import cn from 'classnames';
 
 const Menu = ({ isActive, onPageChange }) => {
+    const navState = {
+        [style.active]: isActive === true,
+        [style.deactive]: isActive === false,
+    }
     return (
         <div
-            className={cn(style.menuContainer, (isActive ? style.active : style.deactive))}
+            className={cn(style.menuContainer, { ...navState })}
         >
             <div className={style.overlay} />
             <div className={style.menuItems}>
