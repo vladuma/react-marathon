@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Menu from '../Menu';
 import NavBar from '../NavBar';
 
-const MenuHeader = ({ onPageChange }) => {
+const MenuHeader = ({ onPageChange, bgActive }) => {
     const [isActive, setActive] = useState(null);
     const toggleNav = () => setActive(!isActive);
 
@@ -12,7 +12,8 @@ const MenuHeader = ({ onPageChange }) => {
             <NavBar
                 isActive={isActive}
                 handleNav={toggleNav}
-                />
+                bgActive={bgActive}
+            />
             <Menu
                 isActive={isActive}
                 onPageChange={onPageChange}
