@@ -1,7 +1,5 @@
-import MenuHeader from '../../components/MenuHeader';
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';
-import Footer from '../../components/Footer';
 
 import bg1 from '../../assets/bg1.jpg';
 import bg3 from '../../assets/bg3.jpg';
@@ -9,12 +7,9 @@ import bg3 from '../../assets/bg3.jpg';
 import POKEMONS from '../../assets/pokemon.json';
 import PokemonCard from '../../components/PokemonCard';
 
-const Home = ({ onPageChange }) => {
+const Home = () => {
   return (
     <>
-        <MenuHeader
-            onPageChange={onPageChange}
-        />
         <Header
             title="Pokemon game"
             descr="Some description"
@@ -53,7 +48,6 @@ const Home = ({ onPageChange }) => {
             descr="Layout 3 description"
             urlBg={bg3}
         />
-        <Footer />
     </>
   );
 }
