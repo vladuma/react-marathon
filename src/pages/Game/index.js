@@ -1,22 +1,36 @@
-import MenuHeader from '../../components/MenuHeader';
+import { useState } from 'react';
 import Layout from '../../components/Layout';
-import Footer from '../../components/Footer';
-import constants from '../../constants';
 
-const GamePage = ({ onPageChange }) => {
-    const goHome = () => onPageChange(constants.HOME_PAGE_SLUG);
+import POKEMONS from '../../assets/pokemon.json';
+import PokemonCard from '../../components/PokemonCard';
+
+const GamePage = () => {
+    const [pokemons, setPokemons] = useState(POKEMONS);
+    const selectCardHandler = (id) => {
+        setPokemons(prevState => prevState.map(pokemon => pokemon.id === id ? { ...pokemon, isActive: !(!!pokemon.isActive) } : pokemon));
+    };
+
     return (
         <>
-            <MenuHeader 
-                onPageChange={onPageChange}
-            />
             <Layout
-                title="Game page."
-                colorBg="#000"
+                title="Cards"
+                colorBg="#e2e2e2"
             >
-                <button onClick={goHome}>Go to Home</button>
+                <div className="flex">
+                {
+                    pokemons.map((pokemon) => (<PokemonCard
+                        key={pokemon.id}
+                        id={pokemon.id}
+                        name={pokemon.name}
+                        type={pokemon.type}
+                        values={pokemon.values}
+                        img={pokemon.img}
+                        isActive={pokemon.isActive}
+                        selectCardHandler={selectCardHandler}
+                    />))
+                } 
+                </div>
             </Layout>
-            <Footer />
         </>
     );
 };

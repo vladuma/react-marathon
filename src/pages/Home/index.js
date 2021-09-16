@@ -1,20 +1,12 @@
-import MenuHeader from '../../components/MenuHeader';
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';
-import Footer from '../../components/Footer';
 
 import bg1 from '../../assets/bg1.jpg';
 import bg3 from '../../assets/bg3.jpg';
 
-import POKEMONS from '../../assets/pokemon.json';
-import PokemonCard from '../../components/PokemonCard';
-
-const Home = ({ onPageChange }) => {
+const Home = () => {
   return (
     <>
-        <MenuHeader
-            onPageChange={onPageChange}
-        />
         <Header
             title="Pokemon game"
             descr="Some description"
@@ -32,28 +24,10 @@ const Home = ({ onPageChange }) => {
             </p>
         </Layout>
         <Layout
-            title="Cards"
-            colorBg="#e2e2e2"
-        >
-            <div className="flex">
-            {
-                POKEMONS.map((pokemon) => (<PokemonCard
-                key={pokemon.id}
-                id={pokemon.id}
-                name={pokemon.name}
-                type={pokemon.type}
-                values={pokemon.values}
-                img={pokemon.img}
-                />))
-            } 
-            </div>
-        </Layout>
-        <Layout
             title="Layout 3 title"
             descr="Layout 3 description"
             urlBg={bg3}
         />
-        <Footer />
     </>
   );
 }

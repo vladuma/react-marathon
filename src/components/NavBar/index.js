@@ -2,9 +2,9 @@
 import style from './style.module.css';
 import cn from 'classnames';
 
-const NavBar = ({ isActive, handleNav }) => {
+const NavBar = ({ isActive, handleNav, bgActive }) => {
     return (
-        <nav className={style.root}>
+        <nav className={cn(style.root, bgActive ? style.bgActive : null)}>
             <div className={style.navWrapper}>
                 <p className={style.brand}>
                     LOGO
