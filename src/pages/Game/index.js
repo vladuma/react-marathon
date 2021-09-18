@@ -13,6 +13,8 @@ const GamePage = () => {
                 const pokemon = {...value};
                 if (pokemon.id === id) {
                     pokemon.active = !pokemon.active;
+                    
+                    database.ref('pokemons/' + key).update(pokemon);
                 };
         
                 acc[key] = pokemon;
@@ -33,6 +35,7 @@ const GamePage = () => {
     
     useEffect(() => {
         database.ref('pokemons').once('value', (snapshot) => setPokemons(snapshot.val()));
+        database.ref('pokemons').on('value', (snapshot) => setPokemons(snapshot.val())); // subscribe to updates
     }, []);
     
     return (
