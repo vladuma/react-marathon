@@ -12,7 +12,7 @@ const GamePage = () => {
                 const[key, value] = item;
                 const pokemon = {...value};
                 if (pokemon.id === id) {
-                    pokemon.active = true;
+                    pokemon.active = !pokemon.active;
                 };
         
                 acc[key] = pokemon;
@@ -22,16 +22,28 @@ const GamePage = () => {
         });
     };
 
+    const addCardHandler = () => {
+        const newKey = database.ref().child('pokemons').push().key;
+        const newPokemon = Object.values(pokemons)[0];
+
+        newPokemon.id = Math.round(Math.random() * 100);
+
+        database.ref('pokemons/' + newKey).set(newPokemon);
+    }
+    
     useEffect(() => {
         database.ref('pokemons').once('value', (snapshot) => setPokemons(snapshot.val()));
     }, []);
-
+    
     return (
         <>
             <Layout
                 title="Cards"
                 colorBg="#e2e2e2"
             >
+                <div className="flex">
+                    <button onClick={addCardHandler}>Add new pokemon</button>
+                </div>
                 <div className="flex">
                 {
                     Object.entries(pokemons).map(([key, {id, name, type, values, img, active}]) => (<PokemonCard
