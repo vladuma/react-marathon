@@ -1,14 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 
-import POKEMONS from '../../assets/pokemon.json';
+import database from '../../services/firebase';
 import PokemonCard from '../../components/PokemonCard';
 
 const GamePage = () => {
-    const [pokemons, setPokemons] = useState(POKEMONS);
+    const [pokemons, setPokemons] = useState({});
     const selectCardHandler = (id) => {
-        setPokemons(prevState => prevState.map(pokemon => pokemon.id === id ? { ...pokemon, isActive: !(!!pokemon.isActive) } : pokemon));
+        setPokemons(prevState => {
+            return Object.entries(prevState).reduce((acc, item) => {
+                const[key, value] = item;
+                const pokemon = {...value};
+                if (pokemon.id === id) {
+                    pokemon.active = true;
+                };
+        
+                acc[key] = pokemon;
+        
+                return acc;
+            }, {});
+        });
     };
+
+    useEffect(() => {
+        database.ref('pokemons').once('value', (snapshot) => setPokemons(snapshot.val()));
+    }, []);
 
     return (
         <>
@@ -18,14 +34,14 @@ const GamePage = () => {
             >
                 <div className="flex">
                 {
-                    pokemons.map((pokemon) => (<PokemonCard
-                        key={pokemon.id}
-                        id={pokemon.id}
-                        name={pokemon.name}
-                        type={pokemon.type}
-                        values={pokemon.values}
-                        img={pokemon.img}
-                        isActive={pokemon.isActive}
+                    Object.entries(pokemons).map(([key, {id, name, type, values, img, active}]) => (<PokemonCard
+                        key={key}
+                        id={id}
+                        name={name}
+                        type={type}
+                        values={values}
+                        img={img}
+                        isActive={active}
                         selectCardHandler={selectCardHandler}
                     />))
                 } 
