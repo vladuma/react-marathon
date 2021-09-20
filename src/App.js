@@ -9,7 +9,6 @@ import NotFound from './pages/NotFound';
 import constants from './constants';
 import cn from 'classnames';
 import style from './style.module.css';
-
 import './App.css';
 
 const App = () => {

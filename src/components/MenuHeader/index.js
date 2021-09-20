@@ -9,7 +9,7 @@ const MenuHeader = ({ bgActive }) => {
     const toggleNav = () => setActive(!isActive);
 
     history.listen(() => {
-        setActive(false); // close nav on path change
+        setActive(null); // close nav on path change
     });
 
     return (
