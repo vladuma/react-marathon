@@ -28,7 +28,7 @@ const GamePage = () => {
         const newKey = database.ref().child('pokemons').push().key;
         const newPokemon = Object.values(pokemons)[0];
 
-        newPokemon.id = Math.round(Math.random() * 100);
+        newPokemon.id = Date.now();
 
         database.ref('pokemons/' + newKey).set(newPokemon);
     }
