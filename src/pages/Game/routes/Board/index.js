@@ -14,11 +14,12 @@ const setItemsPossession = (items, possession) => {
 
 const BoardPage = () => {
     const history = useHistory();
+    const { pokemons } = useContext(PokemonContext);
+    const [steps, setSteps] = useState(0);
     const [board, setBoard] = useState([]);
     const [player1, setPlayer1] = useState(setItemsPossession(Object.values(pokemons), 'blue'));
     const [player2, setPlayer2] = useState([]);
     const [choosenCard, setChoosenCard] = useState(null);
-    const { pokemons } = useContext(PokemonContext);
     const handleBoardClick = async (position) => {
         if (choosenCard) {
             const params = {
@@ -26,7 +27,7 @@ const BoardPage = () => {
                 card: choosenCard,
                 board,
             };
-            const { data: newBoard } = await fetch('', {
+            const { data: newBoard } = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,16 +36,31 @@ const BoardPage = () => {
             }).then(res => res.json());
 
             setBoard(newBoard);
+            setSteps((steps) => steps + 1);
 
-            if (choosenCard.player1) {
+            if (choosenCard.player === 1) {
                 setPlayer1((prevState) => prevState.filter((item) => item.id !== choosenCard.id));
             }
             
-            if (choosenCard.player2) {
+            if (choosenCard.player === 2) {
                 setPlayer2((prevState) => prevState.filter((item) => item.id !== choosenCard.id));
             }
         }
     };
+    const winCounter = (board, player1, player2) => {
+        let player1Counter = player1.length;
+        let player2Counter = player2.length;
+
+        board.forEach((item) => {
+            const { possession } = item.card;
+            const rules = {
+                'blue': () => (player1Counter + 1),
+                'red': () => (player2Counter + 1),
+            }
+            rules[possession] && rules[possession]();
+        });
+        return [player1Counter, player2Counter];
+    }
 
     useEffect(() => {
         async function getBoard() {
@@ -55,8 +71,23 @@ const BoardPage = () => {
             const { data } = await fetch('https://reactmarathon-api.netlify.app/api/create-player').then(res => res.json());
             setPlayer2(setItemsPossession(data), 'red');
         }
-        Promise.all([getPlayer2, getBoard]);
+        getBoard();
+        getPlayer2();
     }, []);
+
+    useEffect(() => {
+        if ( steps === 9) {
+            const [player1Count, player2Count] = winCounter(board, player1, player2);
+
+            if (player1Count > player2Count) {
+                alert('WIN!');
+            } else if (player1Count === player2Count) {
+                alert('Draw');
+            } else {
+                alert('Lose :(');
+            }
+        }
+    }, [steps]);
 
     if (Object.keys(pokemons).length === 0) {
         history.replace('/game');

@@ -5,10 +5,10 @@
     margin-top: -6vw;
 }
 
-.card:first-child {
+.cardBoard:first-child {
     margin-top: 0;
 }
 
-.card.selected {
+.cardBoard.selected {
     margin-left: -20px;
 }
