@@ -86,8 +86,8 @@ const BoardPage = () => {
             } else {
                 alert('Lose :(');
             }
-        }
-    }, [steps]);
+        } // eslint-disable-next-line 
+    }, [steps]); 
 
     if (Object.keys(pokemons).length === 0) {
         history.replace('/game');
