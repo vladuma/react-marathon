@@ -7,8 +7,12 @@ import Board from './routes/Board';
 import { PokemonContext } from '../../context/pokemonContext';
 
 const GamePage = () => {
-    const [selectedPokemons, setSelectedPokemons] = useState({});
     const match = useRouteMatch();
+    const [selectedPokemons, setSelectedPokemons] = useState({});
+    const [opponentPokemons, setOpponentPokemons] = useState([]);
+    const [wonGame, setWonGame] = useState(false);
+    const [selectedOpponentPokemon, setSelectedOpponentPokemons] = useState(null);
+    // add method to clear context
     const handleSelectedPokemon = (key, pokemon) => {
         setSelectedPokemons(prevState => {
             if (prevState[key]) {
@@ -22,12 +26,26 @@ const GamePage = () => {
                 [key]: pokemon,
             }
         })
-    }
+    };
+    const handleSetOpponentPokemons = (pokemons) => {
+        setOpponentPokemons(() => ([...pokemons]));
+    };
+    const handleOpponentSelectedPokemon = (pokemonId) => {
+        if (wonGame) {
+            setSelectedOpponentPokemons(() => (opponentPokemons.find((item) => item.id === pokemonId)));
+        }
+    };
+    const handleGameWin = () => setWonGame(true);
 
     return (
         <PokemonContext.Provider value={{
             pokemons: selectedPokemons,
             onSelectedPokemons: handleSelectedPokemon,
+            opponentPokemons,
+            setOpponentPokemons: handleSetOpponentPokemons,
+            selectedOpponentPokemon,
+            onSelectedOpponentPokemon: handleOpponentSelectedPokemon,
+            handleGameWin,
         }}>
             <Switch>
                 <Route path={`${match.path}/`} exact component={StartGame} />
