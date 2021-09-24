@@ -32,8 +32,8 @@ const StartGame = () => {
         firebase.getPokemonsSoket((pokemons) => {
             setPokemons(pokemons); 
         });
-        // eslint-disable-next-line 
         return () => firebase.offPokemonsSoket();
+        // eslint-disable-next-line 
     }, []);
     
     return (
