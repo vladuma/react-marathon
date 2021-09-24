@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import StartGame from './routes/Start';
 import FinishGame from './routes/Finish';
@@ -13,6 +13,12 @@ const GamePage = () => {
     const [wonGame, setWonGame] = useState(false);
     const [selectedOpponentPokemon, setSelectedOpponentPokemons] = useState(null);
     // add method to clear context
+    const clearContext = () => {
+        setSelectedPokemons([]);
+        setOpponentPokemons([]);
+        setWonGame(false);
+        setSelectedOpponentPokemons(null);
+    };
     const handleSelectedPokemon = (key, pokemon) => {
         setSelectedPokemons(prevState => {
             if (prevState[key]) {
@@ -36,6 +42,8 @@ const GamePage = () => {
         }
     };
     const handleGameWin = () => setWonGame(true);
+
+    useEffect(clearContext, []);
 
     return (
         <PokemonContext.Provider value={{
