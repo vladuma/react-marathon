@@ -9,7 +9,7 @@ import style from './style.module.css';
 
 const StartGame = () => {
     const history = useHistory();
-    const firebase = useContext(FirebaseContext)
+    const firebase = useContext(FirebaseContext);
     const pokemonContext = useContext(PokemonContext);
     const [pokemons, setPokemons] = useState({});
     
