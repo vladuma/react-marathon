@@ -86,15 +86,17 @@ const BoardPage = () => {
         async function getBoard() {
             const { data } = await fetch('https://reactmarathon-api.netlify.app/api/board').then(res => res.json());
             setBoard(data);
+            return data;
         }
         async function getPlayer2() {
             const { data } = await fetch('https://reactmarathon-api.netlify.app/api/create-player').then(res => res.json());
             pokemonContext.setOpponentPokemons(data);
             setPlayer2(setItemsPossession(data, 'red'));
+            return data;
         }
-        getBoard();
-        getPlayer2().then(() => {
-            setTimeout((() => setSide(getRandomSide())), 800);
+
+        Promise.allSettled([getBoard(), getPlayer2()]).then(() => {
+            setTimeout((() => setSide(getRandomSide())), 1000);
         });
         // eslint-disable-next-line 
     }, []);
