@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { PokemonContext } from '../../../../context/pokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import PlayerBoard from './components/PlayerBoard';
+import Result from '../../../../components/Result';
 import style from './style.module.css';
 
 const setItemsPossession = (items, possession) => {
@@ -20,6 +21,7 @@ const BoardPage = () => {
     const [player1, setPlayer1] = useState(setItemsPossession(Object.values(pokemons), 'blue'));
     const [player2, setPlayer2] = useState([]);
     const [choosenCard, setChoosenCard] = useState(null);
+    const [result, setResult] = useState(null);
     const handleBoardClick = async (position) => {
         if (choosenCard) {
             const params = {
@@ -81,16 +83,18 @@ const BoardPage = () => {
     useEffect(() => {
         if ( steps === 9) {
             const [player1Count, player2Count] = winCounter(board, player1, player2);
+            const types = {
+                [player1Count > player2Count]: 'win',
+                [player1Count === player2Count]: 'draw',
+                [player1Count < player2Count]: 'lose',
+            };
+            const type = types[true];
 
-            if (player1Count > player2Count) {
+            if (type === 'win') {
                 pokemonContext.handleGameWin();
-                alert('WIN!');
-            } else if (player1Count === player2Count) {
-                alert('Draw');
-            } else {
-                alert('Lose :(');
             }
-            history.push('/game/finish');
+            setResult(<Result type={type} />);
+            setTimeout(() => history.push('/game/finish'), 2500);
         } // eslint-disable-next-line 
     }, [steps]); 
 
@@ -129,6 +133,7 @@ const BoardPage = () => {
                     ))
                 }
             </div>
+            { result }
         </div>
     );
 };
