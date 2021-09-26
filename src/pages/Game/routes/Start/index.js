@@ -41,7 +41,7 @@ const StartGame = () => {
             <div className={style.buttonWrap}>
                 <button
                     onClick={handleStartGame}
-                    disabled={Object.keys(pokemonContext.pokemons).length < 5}
+                    disabled={Object.keys(pokemonContext.pokemons).length !== 5}
                 >
                     Start game
                 </button>

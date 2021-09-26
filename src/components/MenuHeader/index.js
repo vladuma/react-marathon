@@ -19,9 +19,12 @@ const MenuHeader = ({ bgActive }) => {
                 handleNav={toggleNav}
                 bgActive={bgActive}
             />
-            <Menu
-                isActive={isActive}
-            />
+            {
+                isActive !== null 
+                ? <Menu isActive={isActive} />
+                : null
+            }
+            
         </>
     );
 };
