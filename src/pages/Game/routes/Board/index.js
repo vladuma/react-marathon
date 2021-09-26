@@ -47,6 +47,7 @@ const BoardPage = () => {
             }
         }
     };
+
     const winCounter = (board, player1, player2) => {
         let player1Counter = player1.length;
         let player2Counter = player2.length;
@@ -60,7 +61,7 @@ const BoardPage = () => {
             rules[possession] && rules[possession]();
         });
         return [player1Counter, player2Counter];
-    }
+    };
 
     useEffect(() => {
         async function getBoard() {
@@ -70,7 +71,7 @@ const BoardPage = () => {
         async function getPlayer2() {
             const { data } = await fetch('https://reactmarathon-api.netlify.app/api/create-player').then(res => res.json());
             pokemonContext.setOpponentPokemons(data);
-            setPlayer2(setItemsPossession(data), 'red');
+            setPlayer2(setItemsPossession(data, 'red'));
         }
         getBoard();
         getPlayer2();
