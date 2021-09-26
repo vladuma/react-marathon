@@ -3,7 +3,7 @@ import PokemonCard from '../../../../../../components/PokemonCard';
 import style from './style.module.css';
 import cn from 'classnames';
 
-const PlayerBoard = ({ player, cards, onCardClick }) => {
+const PlayerBoard = ({ player, cards, onCardClick, side }) => {
     const [isSelected, setSelected] = useState(null);
     return (
         <>
@@ -15,11 +15,13 @@ const PlayerBoard = ({ player, cards, onCardClick }) => {
                             [style.selected]: isSelected === item.id,
                         })}
                         onClick={() => {
-                            setSelected(item.id);
-                            onCardClick && onCardClick({
-                                player,
-                                ...item,
-                            });
+                            if (player === side) {
+                                setSelected(item.id);
+                                onCardClick && onCardClick({
+                                    player,
+                                    ...item,
+                                });
+                            }
                         }}
                     >
                         <PokemonCard

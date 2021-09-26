@@ -2,8 +2,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PokemonContext } from '../../../../context/pokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
-import PlayerBoard from './components/PlayerBoard';
 import Result from '../../../../components/Result';
+import ArrowChoice from '../../../../components/ArrowChoice';
+import PlayerBoard from './components/PlayerBoard';
 import style from './style.module.css';
 
 const setItemsPossession = (items, possession) => {
@@ -12,6 +13,13 @@ const setItemsPossession = (items, possession) => {
         possession,
     }));
 };
+
+const getRandomSide = () => {
+    const random = Math.round(Math.random() *  10);
+    return random > 5 ? 2 : 1; 
+};
+
+const changeSide = (side) => (side === 1 ? 2 : 1);
 
 const BoardPage = () => {
     const history = useHistory();
@@ -22,6 +30,8 @@ const BoardPage = () => {
     const [player2, setPlayer2] = useState([]);
     const [choosenCard, setChoosenCard] = useState(null);
     const [result, setResult] = useState(null);
+    const [side, setSide] = useState(0);
+
     const handleBoardClick = async (position) => {
         if (choosenCard) {
             const params = {
@@ -47,7 +57,14 @@ const BoardPage = () => {
             if (choosenCard.player === 2) {
                 setPlayer2((prevState) => prevState.filter((item) => item.id !== choosenCard.id));
             }
+
+            setSide(changeSide(side));
+            setChoosenCard(null);
         }
+    };
+
+    const handleChoosenCard = (card) => {
+        setChoosenCard(card);
     };
 
     const winCounter = (board, player1, player2) => {
@@ -76,7 +93,9 @@ const BoardPage = () => {
             setPlayer2(setItemsPossession(data, 'red'));
         }
         getBoard();
-        getPlayer2();
+        getPlayer2().then(() => {
+            setTimeout((() => setSide(getRandomSide())), 800);
+        });
         // eslint-disable-next-line 
     }, []);
 
@@ -108,14 +127,16 @@ const BoardPage = () => {
                 <PlayerBoard
                     player={1}
                     cards={player1}
-                    onCardClick={(card) => setChoosenCard(card)}
+                    side={side}
+                    onCardClick={handleChoosenCard}
                 />
             </div>
             <div className={style.playerTwo}>
                 <PlayerBoard
                     player={2}
                     cards={player2}
-                    onCardClick={(card) => setChoosenCard(card)}
+                    side={side}
+                    onCardClick={handleChoosenCard}
                 />
             </div>
             <div className={style.board}>
@@ -133,6 +154,7 @@ const BoardPage = () => {
                     ))
                 }
             </div>
+            <ArrowChoice stop={!!side} side={side} />
             { result }
         </div>
     );
