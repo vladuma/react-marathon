@@ -111,11 +111,12 @@ const BoardPage = () => {
             };
             const type = types[true];
 
+            setResult(<Result type={type} />);
+            
             if (type === 'win') {
                 pokemonContext.handleGameWin();
+                setTimeout(() => history.push('/game/finish'), 2500);
             }
-            setResult(<Result type={type} />);
-            setTimeout(() => history.push('/game/finish'), 2500);
         } // eslint-disable-next-line 
     }, [steps]); 
 
