@@ -12,7 +12,9 @@ const FinishPage = () => {
     const firebase = useContext(FirebaseContext);
     const { pokemons, opponentPokemons, selectedOpponentPokemon, onSelectedOpponentPokemon } = useContext(PokemonContext);
     const handleEndGame = async () => {
-        firebase.addPokemon(selectedOpponentPokemon, (() => history.push('/game')));
+        if (selectedOpponentPokemon) {
+            firebase.addPokemon(selectedOpponentPokemon, (() => history.push('/game')));
+        }
     };
     if (Object.keys(pokemons).length === 0 || opponentPokemons.length === 0) {
         history.replace('/game');
