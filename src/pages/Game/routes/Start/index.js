@@ -9,7 +9,7 @@ import style from './style.module.css';
 
 const StartGame = () => {
     const history = useHistory();
-    const firebase = useContext(FirebaseContext)
+    const firebase = useContext(FirebaseContext);
     const pokemonContext = useContext(PokemonContext);
     const [pokemons, setPokemons] = useState({});
     
@@ -32,8 +32,8 @@ const StartGame = () => {
         firebase.getPokemonsSoket((pokemons) => {
             setPokemons(pokemons); 
         });
-
         return () => firebase.offPokemonsSoket();
+        // eslint-disable-next-line 
     }, []);
     
     return (
@@ -41,7 +41,7 @@ const StartGame = () => {
             <div className={style.buttonWrap}>
                 <button
                     onClick={handleStartGame}
-                    disabled={Object.keys(pokemonContext.pokemons).length < 5}
+                    disabled={Object.keys(pokemonContext.pokemons).length !== 5}
                 >
                     Start game
                 </button>
