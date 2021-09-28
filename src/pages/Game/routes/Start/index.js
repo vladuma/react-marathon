@@ -32,7 +32,7 @@ const StartGame = () => {
     const handleStartGame = () => history.push('/game/board')
     
     useEffect(() => {
-        dispatch(getPokemonsAsync())
+        dispatch(getPokemonsAsync());
         // eslint-disable-next-line
     }, []);
 
