@@ -47,8 +47,8 @@ const GamePage = () => {
 
     return (
         <PokemonContext.Provider value={{
-            pokemons: selectedPokemons,
-            onSelectedPokemons: handleSelectedPokemon,
+            // pokemons: selectedPokemons,
+            // onSelectedPokemons: handleSelectedPokemon,
             opponentPokemons,
             setOpponentPokemons: handleSetOpponentPokemons,
             selectedOpponentPokemon,
