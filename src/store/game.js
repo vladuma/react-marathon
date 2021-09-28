@@ -5,6 +5,8 @@ export const slice = createSlice({
     initialState: {
         pokemons: {},
         opponentPokemons: [],
+        selectedOpponentPokemon: null,
+        wonGame: false,
     },
     reducers: {
         selectPokemon: (state, action) => {
@@ -30,13 +32,23 @@ export const slice = createSlice({
         setOpponentPokemons: (state, action) => ({
             ...state,
             opponentPokemons: action.payload,
-        })
+        }),
+        setSelectedOpponentPokemons: (state, action) => ({
+            ...state,
+            selectedOpponentPokemon: state.opponentPokemons.find((item) => item.id === action.payload.id),
+        }),
+        setWonGame: (state) => ({
+            ...state,
+            wonGame: true,
+        }),
     },
 });
 
-export const { selectPokemon, setOpponentPokemons } = slice.actions;
+export const { selectPokemon, setOpponentPokemons, setSelectedOpponentPokemons, setWonGame } = slice.actions;
 
 export const selectPokemonsSelected = state => state.game.pokemons;
 export const selectOpponentPokemons = state => state.game.opponentPokemons;
+export const selectOpponentPokemonsSelected = state => state.game.selectedOpponentPokemon;
+export const selectGameResult = state => state.game.wonGame;
 
 export default slice.reducer;

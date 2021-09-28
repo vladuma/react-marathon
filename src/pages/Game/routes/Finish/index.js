@@ -1,11 +1,10 @@
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PokemonContext } from '../../../../context/pokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import Layout from '../../../../components/Layout';
 import { FirebaseContext } from '../../../../context/firebaseContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPokemonsSelected, selectOpponentPokemons } from '../../../../store/game';
+import { selectPokemonsSelected, selectOpponentPokemons, selectOpponentPokemonsSelected, setSelectedOpponentPokemons } from '../../../../store/game';
 import cn from 'classnames';
 import style from './style.module.css';
 
@@ -15,7 +14,7 @@ const FinishPage = () => {
     const firebase = useContext(FirebaseContext);
     const pokemons = useSelector(selectPokemonsSelected);
     const opponentPokemons = useSelector(selectOpponentPokemons);
-    const { selectedOpponentPokemon, onSelectedOpponentPokemon } = useContext(PokemonContext);
+    const selectedOpponentPokemon = useSelector(selectOpponentPokemonsSelected);
     const handleEndGame = async () => {
         if (selectedOpponentPokemon) {
             firebase.addPokemon(selectedOpponentPokemon, (() => history.push('/game')));
@@ -58,7 +57,7 @@ const FinishPage = () => {
                             img={item.img}
                             isActive
                             className={selectedOpponentPokemon && item.id === selectedOpponentPokemon.id ? style.selected : ''}
-                            handleChangeSelected={() => onSelectedOpponentPokemon(item.id)}
+                            handleChangeSelected={() => dispatch(setSelectedOpponentPokemons(item.id))}
                         />
                     ))
                 }

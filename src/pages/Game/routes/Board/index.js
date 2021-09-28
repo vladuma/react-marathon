@@ -1,8 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PokemonContext } from '../../../../context/pokemonContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPokemonsSelected, setOpponentPokemons } from '../../../../store/game';
+import { selectPokemonsSelected, setOpponentPokemons, setWonGame } from '../../../../store/game';
 import PokemonCard from '../../../../components/PokemonCard';
 import Result from '../../../../components/Result';
 import ArrowChoice from '../../../../components/ArrowChoice';
@@ -26,7 +25,6 @@ const changeSide = (side) => (side === 1 ? 2 : 1);
 const BoardPage = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { ...pokemonContext } = useContext(PokemonContext);
     const pokemons = useSelector(selectPokemonsSelected);
     const [steps, setSteps] = useState(0);
     const [board, setBoard] = useState([]);
@@ -118,7 +116,7 @@ const BoardPage = () => {
             setResult(<Result type={type} />);
             
             if (type === 'win') {
-                pokemonContext.handleGameWin();
+                dispatch(setWonGame());
                 setTimeout(() => history.push('/game/finish'), 2500);
             }
         } // eslint-disable-next-line 
