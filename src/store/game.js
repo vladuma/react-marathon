@@ -35,7 +35,7 @@ export const slice = createSlice({
         }),
         setSelectedOpponentPokemons: (state, action) => ({
             ...state,
-            selectedOpponentPokemon: state.opponentPokemons.find((item) => item.id === action.payload.id),
+            selectedOpponentPokemon: state.opponentPokemons.find((item) => item.id === action.payload),
         }),
         setWonGame: (state) => ({
             ...state,

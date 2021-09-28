@@ -76,8 +76,8 @@ const BoardPage = () => {
         board.forEach((item) => {
             const { possession } = item.card;
             const rules = {
-                'blue': () => (player1Counter + 1),
-                'red': () => (player2Counter + 1),
+                'blue': () => { player1Counter += 1 },
+                'red': () => { player2Counter += 1 },
             }
             rules[possession] && rules[possession]();
         });
@@ -106,19 +106,22 @@ const BoardPage = () => {
     useEffect(() => {
         if ( steps === 9) {
             const [player1Count, player2Count] = winCounter(board, player1, player2);
+            console.log(player1Count, player2Count);
             const types = {
                 [player1Count > player2Count]: 'win',
                 [player1Count === player2Count]: 'draw',
                 [player1Count < player2Count]: 'lose',
             };
+            console.log(types);
+            console.log(types[true]);
             const type = types[true];
 
             setResult(<Result type={type} />);
             
-            if (type === 'win') {
+            // if (type === 'win') {
                 dispatch(setWonGame());
                 setTimeout(() => history.push('/game/finish'), 2500);
-            }
+            // }
         } // eslint-disable-next-line 
     }, [steps]); 
 

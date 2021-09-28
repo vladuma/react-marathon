@@ -38,5 +38,11 @@ export const getPokemonsAsync = () => async (dispatch) => {
     const data = await Firebase.getPokemonsOnce();
     dispatch(fetchPokemonsResolve(data.val()))
 }
+export const addPokemonAsync = (pokemon) => async (dispatch) => {
+    dispatch(fetchPokemons());
+    await Firebase.addPokemon(pokemon); 
+    const data = await Firebase.getPokemonsOnce();
+    dispatch(fetchPokemonsResolve(data.val()))
+}
 
 export default slice.reducer;
