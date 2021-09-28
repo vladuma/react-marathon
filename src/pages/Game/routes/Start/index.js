@@ -1,16 +1,19 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import PokemonCard from '../../../../components/PokemonCard';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { FirebaseContext } from '../../../../context/firebaseContext';
 import { PokemonContext } from '../../../../context/pokemonContext';
+import { selectPokemonsData, getPokemonsAsync } from '../../../../store/pokemons';
+
+import PokemonCard from '../../../../components/PokemonCard';
 
 import style from './style.module.css';
 
 const StartGame = () => {
     const history = useHistory();
-    const firebase = useContext(FirebaseContext);
+    const dispatch = useDispatch();
     const pokemonContext = useContext(PokemonContext);
+    const pokemonsRedux = useSelector(selectPokemonsData);
     const [pokemons, setPokemons] = useState({});
     
     const handleChangeSelected = (key) => {
@@ -29,12 +32,13 @@ const StartGame = () => {
     const handleStartGame = () => history.push('/game/board')
     
     useEffect(() => {
-        firebase.getPokemonsSoket((pokemons) => {
-            setPokemons(pokemons); 
-        });
-        return () => firebase.offPokemonsSoket();
-        // eslint-disable-next-line 
+        dispatch(getPokemonsAsync())
+        // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        setPokemons(pokemonsRedux);
+    }, [pokemonsRedux]);
     
     return (
         <>
