@@ -1,19 +1,25 @@
-import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PokemonContext } from '../../../../context/pokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import Layout from '../../../../components/Layout';
-import { FirebaseContext } from '../../../../context/firebaseContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPokemonsSelected, selectOpponentPokemons, selectOpponentPokemonsSelected, setSelectedOpponentPokemons } from '../../../../store/game';
+import { addPokemonAsync } from '../../../../store/pokemons';
 import cn from 'classnames';
 import style from './style.module.css';
 
 const FinishPage = () => {
     const history = useHistory();
-    const firebase = useContext(FirebaseContext);
-    const { pokemons, opponentPokemons, selectedOpponentPokemon, onSelectedOpponentPokemon } = useContext(PokemonContext);
+    const dispatch = useDispatch();
+    const pokemons = useSelector(selectPokemonsSelected);
+    const opponentPokemons = useSelector(selectOpponentPokemons);
+    const selectedOpponentPokemon = useSelector(selectOpponentPokemonsSelected);
+    const handleOpponentCardSelected = (id) => {
+        dispatch(setSelectedOpponentPokemons(id));
+    };
     const handleEndGame = async () => {
         if (selectedOpponentPokemon) {
-            firebase.addPokemon(selectedOpponentPokemon, (() => history.push('/game')));
+            dispatch(addPokemonAsync(selectedOpponentPokemon));
+            history.push('/game');
         }
     };
     if (Object.keys(pokemons).length === 0 || opponentPokemons.length === 0) {
@@ -53,7 +59,7 @@ const FinishPage = () => {
                             img={item.img}
                             isActive
                             className={selectedOpponentPokemon && item.id === selectedOpponentPokemon.id ? style.selected : ''}
-                            handleChangeSelected={() => onSelectedOpponentPokemon(item.id)}
+                            handleChangeSelected={() => handleOpponentCardSelected(item.id)}
                         />
                     ))
                 }

@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { PokemonContext } from '../../../../context/pokemonContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPokemonsSelected, setOpponentPokemons, setWonGame } from '../../../../store/game';
 import PokemonCard from '../../../../components/PokemonCard';
 import Result from '../../../../components/Result';
 import ArrowChoice from '../../../../components/ArrowChoice';
@@ -23,7 +24,8 @@ const changeSide = (side) => (side === 1 ? 2 : 1);
 
 const BoardPage = () => {
     const history = useHistory();
-    const { pokemons, ...pokemonContext } = useContext(PokemonContext);
+    const dispatch = useDispatch();
+    const pokemons = useSelector(selectPokemonsSelected);
     const [steps, setSteps] = useState(0);
     const [board, setBoard] = useState([]);
     const [player1, setPlayer1] = useState(setItemsPossession(Object.values(pokemons), 'blue'));
@@ -74,8 +76,8 @@ const BoardPage = () => {
         board.forEach((item) => {
             const { possession } = item.card;
             const rules = {
-                'blue': () => (player1Counter + 1),
-                'red': () => (player2Counter + 1),
+                'blue': () => { player1Counter += 1 },
+                'red': () => { player2Counter += 1 },
             }
             rules[possession] && rules[possession]();
         });
@@ -90,7 +92,7 @@ const BoardPage = () => {
         }
         async function getPlayer2() {
             const { data } = await fetch('https://reactmarathon-api.netlify.app/api/create-player').then(res => res.json());
-            pokemonContext.setOpponentPokemons(data);
+            dispatch(setOpponentPokemons(data));
             setPlayer2(setItemsPossession(data, 'red'));
             return data;
         }
@@ -104,17 +106,20 @@ const BoardPage = () => {
     useEffect(() => {
         if ( steps === 9) {
             const [player1Count, player2Count] = winCounter(board, player1, player2);
+            console.log(player1Count, player2Count);
             const types = {
                 [player1Count > player2Count]: 'win',
                 [player1Count === player2Count]: 'draw',
                 [player1Count < player2Count]: 'lose',
             };
+            console.log(types);
+            console.log(types[true]);
             const type = types[true];
 
             setResult(<Result type={type} />);
             
             if (type === 'win') {
-                pokemonContext.handleGameWin();
+                dispatch(setWonGame());
                 setTimeout(() => history.push('/game/finish'), 2500);
             }
         } // eslint-disable-next-line 
