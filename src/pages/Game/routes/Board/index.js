@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PokemonContext } from '../../../../context/pokemonContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPokemonsSelected, setOpponentPokemons } from '../../../../store/game';
 import PokemonCard from '../../../../components/PokemonCard';
 import Result from '../../../../components/Result';
 import ArrowChoice from '../../../../components/ArrowChoice';
@@ -23,7 +25,9 @@ const changeSide = (side) => (side === 1 ? 2 : 1);
 
 const BoardPage = () => {
     const history = useHistory();
-    const { pokemons, ...pokemonContext } = useContext(PokemonContext);
+    const dispatch = useDispatch();
+    const { ...pokemonContext } = useContext(PokemonContext);
+    const pokemons = useSelector(selectPokemonsSelected);
     const [steps, setSteps] = useState(0);
     const [board, setBoard] = useState([]);
     const [player1, setPlayer1] = useState(setItemsPossession(Object.values(pokemons), 'blue'));
@@ -90,7 +94,7 @@ const BoardPage = () => {
         }
         async function getPlayer2() {
             const { data } = await fetch('https://reactmarathon-api.netlify.app/api/create-player').then(res => res.json());
-            pokemonContext.setOpponentPokemons(data);
+            dispatch(setOpponentPokemons(data));
             setPlayer2(setItemsPossession(data, 'red'));
             return data;
         }

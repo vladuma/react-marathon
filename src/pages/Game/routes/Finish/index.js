@@ -4,13 +4,18 @@ import { PokemonContext } from '../../../../context/pokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import Layout from '../../../../components/Layout';
 import { FirebaseContext } from '../../../../context/firebaseContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPokemonsSelected, selectOpponentPokemons } from '../../../../store/game';
 import cn from 'classnames';
 import style from './style.module.css';
 
 const FinishPage = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
     const firebase = useContext(FirebaseContext);
-    const { pokemons, opponentPokemons, selectedOpponentPokemon, onSelectedOpponentPokemon } = useContext(PokemonContext);
+    const pokemons = useSelector(selectPokemonsSelected);
+    const opponentPokemons = useSelector(selectOpponentPokemons);
+    const { selectedOpponentPokemon, onSelectedOpponentPokemon } = useContext(PokemonContext);
     const handleEndGame = async () => {
         if (selectedOpponentPokemon) {
             firebase.addPokemon(selectedOpponentPokemon, (() => history.push('/game')));
