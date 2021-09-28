@@ -5,7 +5,7 @@ export const slice = createSlice({
     name: 'pokemons',
     initialState: {
         loading: false,
-        date: {},
+        data: {},
         error: null,
     },
     reducers: {
