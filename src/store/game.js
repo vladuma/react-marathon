@@ -41,10 +41,16 @@ export const slice = createSlice({
             ...state,
             wonGame: true,
         }),
+        resetStore: () => ({
+            pokemons: {},
+            opponentPokemons: [],
+            selectedOpponentPokemon: null,
+            wonGame: false,
+        }),
     },
 });
 
-export const { selectPokemon, setOpponentPokemons, setSelectedOpponentPokemons, setWonGame } = slice.actions;
+export const { selectPokemon, setOpponentPokemons, setSelectedOpponentPokemons, setWonGame, resetStore } = slice.actions;
 
 export const selectPokemonsSelected = state => state.game.pokemons;
 export const selectOpponentPokemons = state => state.game.opponentPokemons;
