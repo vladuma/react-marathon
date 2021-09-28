@@ -118,10 +118,10 @@ const BoardPage = () => {
 
             setResult(<Result type={type} />);
             
-            // if (type === 'win') {
+            if (type === 'win') {
                 dispatch(setWonGame());
                 setTimeout(() => history.push('/game/finish'), 2500);
-            // }
+            }
         } // eslint-disable-next-line 
     }, [steps]); 
 
