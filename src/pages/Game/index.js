@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { Switch, useRouteMatch } from 'react-router-dom';
 import StartGame from './routes/Start';
 import FinishGame from './routes/Finish';
 import PrivateRoute from '../../components/PrivateRoute';

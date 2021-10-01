@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import Input from '../Input';
+import style from './style.module.css';
 
 const LoginForm = ({ onSubmit }) => {
     const [email, setEmail] = useState('example@test.com');
     const [password, setPassword] = useState('');
+    const [isLogin, setIsLogin] = useState(true);
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -11,6 +13,7 @@ const LoginForm = ({ onSubmit }) => {
         onSubmit && onSubmit({
             email,
             password,
+            isLogin,
         });
 
         setEmail('');
@@ -33,9 +36,14 @@ const LoginForm = ({ onSubmit }) => {
                 label="Password" 
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button onClick={handleClick}>
-                Submit
-            </button>
+            <div className={style.wrapper}>
+                <button onClick={handleClick}>
+                    {isLogin ? 'Login' : 'Register'}
+                </button>
+                <button className={style.link} onClick={() => setIsLogin((s) => !s)}>
+                    {!isLogin ? 'Login' : 'Register'}?
+                </button>
+            </div>
         </div>
     );
 };

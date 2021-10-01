@@ -12,7 +12,7 @@ const MenuHeader = ({ bgActive }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const handleNavClick = () => setNavOpen(prevState => !prevState);
     const handleLoginClick = () => setModalOpen(prevState => !prevState);
-    const handleFormSubmit = async ({ email, password}) => {
+    const handleFormSubmit = async ({ email, password, isLogin }) => {
         const options = {
             method: 'POST',
             body: JSON.stringify({
@@ -21,13 +21,14 @@ const MenuHeader = ({ bgActive }) => {
                 returnSecureToken: true,
             }),
         };
-        const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDulN3LR-G9esYIsIYyLmCRqL5OlbK6tQU', options).then(res => res.json());
+        const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword' : 'signUp'}?key=AIzaSyDulN3LR-G9esYIsIYyLmCRqL5OlbK6tQU`, options).then(res => res.json());
 
         if (response.hasOwnProperty('error')) {
             NotificationManager.error(response.error.message, 'Error!');
         } else {
             localStorage.setItem('idToken', response.idToken);
             NotificationManager.success('Success!');
+            handleLoginClick();
         }
     };
 
