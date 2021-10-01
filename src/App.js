@@ -1,6 +1,7 @@
 import { useLocation, Switch, Route, Redirect } from 'react-router';
 import { NotificationContainer } from 'react-notifications';
 
+import PrivateRoute from './components/PrivateRoute';
 import MenuHeader from './components/MenuHeader';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -29,8 +30,8 @@ const App = () => {
             <div className={cn(style.wrap, { [style.isHomePage]: isPadding })}>
               <Switch>
                 <Route path={constants.HOME_PAGE_SLUG} exact component={Home} />
-                <Route path={constants.GAME_PAGE_SLUG} component={Game} />
-                <Route path={constants.ABOUT_PAGE_SLUG} component={About} />
+                <PrivateRoute path={constants.GAME_PAGE_SLUG} component={Game} />
+                <PrivateRoute path={constants.ABOUT_PAGE_SLUG} component={About} />
                 <Route path={constants.CONTACT_PAGE_SLUG} component={Contact} />
                 <Route render={() => (
                   <Redirect to="/404" />

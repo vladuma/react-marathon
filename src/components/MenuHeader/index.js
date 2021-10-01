@@ -9,7 +9,7 @@ import LoginForm from '../LoginForm';
 const MenuHeader = ({ bgActive }) => {
     const history = useHistory();
     const [isNavOpen, setNavOpen] = useState(null);
-    const [isModalOpen, setModalOpen] = useState(true);
+    const [isModalOpen, setModalOpen] = useState(false);
     const handleNavClick = () => setNavOpen(prevState => !prevState);
     const handleLoginClick = () => setModalOpen(prevState => !prevState);
     const handleFormSubmit = async ({ email, password}) => {
@@ -26,7 +26,8 @@ const MenuHeader = ({ bgActive }) => {
         if (response.hasOwnProperty('error')) {
             NotificationManager.error(response.error.message, 'Error!');
         } else {
-            NotificationManager.auccess('Success!');
+            localStorage.setItem('idToken', response.idToken);
+            NotificationManager.success('Success!');
         }
     };
 
