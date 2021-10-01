@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { Switch, useRouteMatch } from 'react-router-dom';
 import StartGame from './routes/Start';
 import FinishGame from './routes/Finish';
+import PrivateRoute from '../../components/PrivateRoute';
 import Board from './routes/Board';
 import { resetStore } from '../../store/game';
 
@@ -19,9 +20,9 @@ const GamePage = () => {
 
     return (
         <Switch>
-            <Route path={`${match.path}/`} exact component={StartGame} />
-            <Route path={`${match.path}/board`} component={Board} />
-            <Route path={`${match.path}/finish`} component={FinishGame} />
+            <PrivateRoute path={`${match.path}/`} exact component={StartGame} />
+            <PrivateRoute path={`${match.path}/board`} component={Board} />
+            <PrivateRoute path={`${match.path}/finish`} component={FinishGame} />
         </Switch>
     );
 };
