@@ -32,7 +32,7 @@ const App = () => {
                 <Route path={constants.HOME_PAGE_SLUG} exact component={Home} />
                 <PrivateRoute path={constants.GAME_PAGE_SLUG} component={Game} />
                 <PrivateRoute path={constants.ABOUT_PAGE_SLUG} component={About} />
-                <Route path={constants.CONTACT_PAGE_SLUG} component={Contact} />
+                <PrivateRoute path={constants.CONTACT_PAGE_SLUG} component={Contact} />
                 <Route render={() => (
                   <Redirect to="/404" />
                 )} />
