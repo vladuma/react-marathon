@@ -13,7 +13,8 @@ const Modal = ({ title, children, isOpen, onModalClose }) => {
 
     useEffect(() => {
         document.querySelector('body').style.overflow = isOpen ? 'hidden' : null;
-    }, [isOpen]);
+        // eslint-disable-next-line
+    }, []);
 
     return (
         <div

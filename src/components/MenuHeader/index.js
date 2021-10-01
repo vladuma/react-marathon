@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications';
 import Menu from '../Menu';
 import NavBar from '../NavBar';
 import Modal from '../Modal';
@@ -21,7 +22,12 @@ const MenuHeader = ({ bgActive }) => {
             }),
         };
         const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDulN3LR-G9esYIsIYyLmCRqL5OlbK6tQU', options).then(res => res.json());
-        console.log(response);
+
+        if (response.hasOwnProperty('error')) {
+            NotificationManager.error(response.error.message, 'Error!');
+        } else {
+            NotificationManager.auccess('Success!');
+        }
     };
 
     history.listen(() => {
