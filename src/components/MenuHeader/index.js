@@ -5,23 +5,26 @@ import NavBar from '../NavBar';
 
 const MenuHeader = ({ bgActive }) => {
     const history = useHistory();
-    const [isActive, setActive] = useState(null);
-    const toggleNav = () => setActive(!isActive);
+    const [isNavOpen, setNavOpen] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(null);
+    const handleNavClick = () => setNavOpen(prevState => !prevState);
+    const handleClickLogin = () => setModalOpen(prevState => !prevState);
 
     history.listen(() => {
-        setActive(null); // close nav on path change
+        setNavOpen(null); // close nav on path change
     });
 
     return (
         <>
             <NavBar
-                isActive={isActive}
-                handleNav={toggleNav}
+                isActive={isNavOpen}
+                handleNav={handleNavClick}
                 bgActive={bgActive}
+                onClickLogin={handleClickLogin}
             />
             {
-                isActive !== null 
-                ? <Menu isActive={isActive} />
+                isNavOpen !== null 
+                ? <Menu isActive={isNavOpen} />
                 : null
             }
             
