@@ -3,13 +3,26 @@ import { useHistory } from 'react-router-dom';
 import Menu from '../Menu';
 import NavBar from '../NavBar';
 import Modal from '../Modal';
+import LoginForm from '../LoginForm';
 
 const MenuHeader = ({ bgActive }) => {
     const history = useHistory();
     const [isNavOpen, setNavOpen] = useState(null);
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(true);
     const handleNavClick = () => setNavOpen(prevState => !prevState);
     const handleLoginClick = () => setModalOpen(prevState => !prevState);
+    const handleFormSubmit = async ({ email, password}) => {
+        const options = {
+            method: 'POST',
+            body: JSON.stringify({
+                email,
+                password,
+                returnSecureToken: true,
+            }),
+        };
+        const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDulN3LR-G9esYIsIYyLmCRqL5OlbK6tQU', options).then(res => res.json());
+        console.log(response);
+    };
 
     history.listen(() => {
         setNavOpen(null); // close nav on path change
@@ -35,7 +48,9 @@ const MenuHeader = ({ bgActive }) => {
                         title="Login"
                         onModalClose={handleLoginClick}
                     >
-                        Some text...
+                        <LoginForm
+                            onSubmit={handleFormSubmit}
+                        />
                     </Modal>
                 )
             }
