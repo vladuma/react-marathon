@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+
 import cn from 'classnames';
 import style from './style.module.css';
 
