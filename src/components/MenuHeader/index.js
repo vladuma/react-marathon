@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
+import { useDispatch } from 'react-redux';
+import { getUserUpdateAsync } from '../../store/user';
+
 import Menu from '../Menu';
 import NavBar from '../NavBar';
 import Modal from '../Modal';
 import LoginForm from '../LoginForm';
 
 const MenuHeader = ({ bgActive }) => {
+    const dispatch = useDispatch();
     const history = useHistory();
     const [isNavOpen, setNavOpen] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
@@ -28,7 +32,7 @@ const MenuHeader = ({ bgActive }) => {
         } else {
             if (!isLogin) {
                 const startupPokemons = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then(res => res.json());
-                console.log(startupPokemons);
+
                 for(const item of startupPokemons.data) {
                     fetch(`https://pokemon-game-7d203-default-rtdb.europe-west1.firebasedatabase.app/${response.localId}/pokemons.json?auth=${response.idToken}`, {
                         method: 'POST',
@@ -38,6 +42,7 @@ const MenuHeader = ({ bgActive }) => {
             }
             localStorage.setItem('idToken', response.idToken);
             NotificationManager.success('Success!');
+            dispatch(getUserUpdateAsync);
             handleLoginClick();
         }
     };

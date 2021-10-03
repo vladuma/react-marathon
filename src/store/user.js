@@ -27,11 +27,10 @@ export const selectUserLoading = state => state.user.isLoading;
 export const selectUserData = state => state.user.data;
 export const selectUserLocalId = state => state.user.data?.localId;
 
-export const getUserAsync = () => async (dispatch) => {
+export const getUserUpdateAsync = () => async (dispatch) => {
     const idToken = localStorage.getItem('idToken');
 
     if (idToken) {
-        dispatch(fetchUser());
         const options = {
             method: 'POST',
             body: JSON.stringify({
@@ -49,6 +48,10 @@ export const getUserAsync = () => async (dispatch) => {
     } else {
         dispatch(removeUser(idToken));
     }
+}
+export const getUserAsync = () => async (dispatch) => {
+    dispatch(fetchUser());
+    dispatch(getUserUpdateAsync());
 }
 
 export default slice.reducer;

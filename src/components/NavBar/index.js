@@ -9,7 +9,6 @@ import cn from 'classnames';
 const NavBar = ({ isActive, handleNav, bgActive, onClickLogin }) => {
     const isUserLoading = useSelector(selectUserLoading);
     const localId = useSelector(selectUserLocalId);
-    console.log(localId, isUserLoading);
 
     return (
         <nav className={cn(style.root, bgActive ? style.bgActive : null)}>
