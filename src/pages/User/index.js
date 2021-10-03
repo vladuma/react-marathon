@@ -1,17 +1,28 @@
-import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux';
+import { selectUserData } from '../../store/user';
 import Layout from '../../components/Layout';
-import constants from '../../constants';
+import Input from '../../components/Input';
 
 const AboutPage = () => {
-    const history = useHistory();
-    const goHome = () => history.push(constants.HOME_PAGE_SLUG);
+    const userData = useSelector(selectUserData);
+    const UserInfo = Object.entries(userData).map(([key, value]) => {
+        return <Input
+            key={key}
+            value={`${value}`}
+            name={key}
+            label={key}
+            disabled={true}
+            onChange={() => {}}
+        />
+    })
+
     return (
         <>
             <Layout
                 title="This is User page"
                 colorBg="#fff"
             >
-                <button onClick={goHome}>Go to Home</button>
+                { UserInfo }
             </Layout>
         </>
     );
