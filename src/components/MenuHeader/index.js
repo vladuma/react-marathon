@@ -5,7 +5,6 @@ import Menu from '../Menu';
 import NavBar from '../NavBar';
 import Modal from '../Modal';
 import LoginForm from '../LoginForm';
-const API_KEY = 'AIzaSyDulN3LR-G9esYIsIYyLmCRqL5OlbK6tQU';
 
 const MenuHeader = ({ bgActive }) => {
     const history = useHistory();
@@ -22,7 +21,7 @@ const MenuHeader = ({ bgActive }) => {
                 returnSecureToken: true,
             }),
         };
-        const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword' : 'signUp'}?key=${API_KEY}`, options).then(res => res.json());
+        const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${isLogin ? 'signInWithPassword' : 'signUp'}?key=${process.env.REACT_APP_FIREBASE_KEY}`, options).then(res => res.json());
 
         if (response.hasOwnProperty('error')) {
             NotificationManager.error(response.error.message, 'Error!');
