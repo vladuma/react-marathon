@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import style from './style.module.css';
 
-const Input = ({ value, label, type, name, required, onChange }) => {
+const Input = ({ value, label, type, name, required, onChange, disabled = false }) => {
     return (
         <div className={style.root}>
             <input
@@ -12,6 +12,7 @@ const Input = ({ value, label, type, name, required, onChange }) => {
                     [style.valid]: value && value.length > 0,
                 })}
                 required={required}
+                disabled={disabled}
                 onChange={onChange}
             />
             <span
