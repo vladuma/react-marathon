@@ -40,8 +40,7 @@ export const getUserUpdateAsync = () => async (dispatch) => {
         const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${process.env.REACT_APP_FIREBASE_KEY}`, options).then(res => res.json());
 
         if (response.hasOwnProperty('error')) {
-            dispatch(removeUser());
-            localStorage.removeItem('idToken');
+            dispatch(logoutUserAsync());
         } else {
             dispatch(updateUser(response.users[0]));
         }
@@ -52,6 +51,10 @@ export const getUserUpdateAsync = () => async (dispatch) => {
 export const getUserAsync = () => async (dispatch) => {
     dispatch(fetchUser());
     dispatch(getUserUpdateAsync());
+}
+export const logoutUserAsync = () => async (dispatch) => {
+    dispatch(removeUser());
+    localStorage.removeItem('idToken');
 }
 
 export default slice.reducer;

@@ -6,7 +6,7 @@ import { ReactComponent as UserSVG } from '../../assets/user.svg';
 import style from './style.module.css';
 import cn from 'classnames';
 
-const NavBar = ({ isActive, handleNav, bgActive, onClickLogin }) => {
+const NavBar = ({ isActive, handleNav, bgActive, onClickLogin, onClickLogout }) => {
     const isUserLoading = useSelector(selectUserLoading);
     const localId = useSelector(selectUserLocalId);
 
@@ -17,12 +17,20 @@ const NavBar = ({ isActive, handleNav, bgActive, onClickLogin }) => {
                     LOGO
                 </div>
                 <div className={style.loginAndMenu}>
-                    {(!isUserLoading && !!localId) && (<Link
-                            className={style.loginWrap}
-                            to="/user"
-                        >
-                            <UserSVG />
-                        </Link>)
+                    {(!isUserLoading && !!localId) && (<>
+                            <Link
+                                className={style.loginWrap}
+                                to="/user"
+                            >
+                                <UserSVG />
+                            </Link>
+                            <div
+                                className={style.loginWrap}
+                                onClick={onClickLogout}
+                            >
+                                <LoginSVG />
+                            </div>
+                        </>)
                     }
                     {(!isUserLoading && !localId) && (<div
                             className={style.loginWrap}

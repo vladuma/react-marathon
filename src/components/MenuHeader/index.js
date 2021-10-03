@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
 import { useDispatch } from 'react-redux';
-import { getUserUpdateAsync } from '../../store/user';
+import { getUserUpdateAsync, logoutUserAsync } from '../../store/user';
 
 import Menu from '../Menu';
 import NavBar from '../NavBar';
@@ -16,6 +16,10 @@ const MenuHeader = ({ bgActive }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const handleNavClick = () => setNavOpen(prevState => !prevState);
     const handleLoginClick = () => setModalOpen(prevState => !prevState);
+    const handleLogoutClick = () => {
+        dispatch(logoutUserAsync());
+        history.push('/');
+    };
     const handleFormSubmit = async ({ email, password, isLogin }) => {
         const options = {
             method: 'POST',
@@ -58,6 +62,7 @@ const MenuHeader = ({ bgActive }) => {
                 handleNav={handleNavClick}
                 bgActive={bgActive}
                 onClickLogin={handleLoginClick}
+                onClickLogout={handleLogoutClick}
             />
             {
                 isNavOpen !== null 
