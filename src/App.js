@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Game from './pages/Game';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import User from './pages/User';
 import NotFound from './pages/NotFound';
 
 import constants from './constants';
@@ -48,6 +49,7 @@ const App = () => {
                 <PrivateRoute path={constants.GAME_PAGE_SLUG} component={Game} />
                 <PrivateRoute path={constants.ABOUT_PAGE_SLUG} component={About} />
                 <PrivateRoute path={constants.CONTACT_PAGE_SLUG} component={Contact} />
+                <PrivateRoute path={constants.USER_PAGE_SLUG} component={User} />
                 <Route render={() => (
                   <Redirect to="/404" />
                 )} />
