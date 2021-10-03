@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { useLocation, Switch, Route, Redirect } from 'react-router';
 import { NotificationContainer } from 'react-notifications';
+import { useDispatch } from 'react-redux';
+import { getUserAsync } from './store/user';
 
 import PrivateRoute from './components/PrivateRoute';
 import MenuHeader from './components/MenuHeader';
@@ -20,6 +23,13 @@ import './App.css';
 const App = () => {
   const location = useLocation();
   const isPadding = location.pathname === '/' || location.pathname === '/game/board';
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUserAsync());
+    // eslint-disable-next-line
+  }, [])
+
   return (
     <>
       <Switch>
