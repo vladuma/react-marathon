@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { selectUserLocalId } from './user';
-import Firebase from '../services/firebase';
 
 export const slice = createSlice({
     name: 'pokemons',
@@ -40,11 +39,15 @@ export const getPokemonsAsync = () => async (dispatch, getState) => {
     const data = await fetch(`https://pokemon-game-7d203-default-rtdb.europe-west1.firebasedatabase.app/${localId}/pokemons.json`).then(res => res.json());
     dispatch(fetchPokemonsResolve(data || {}));
 }
-export const addPokemonAsync = (pokemon) => async (dispatch) => {
+export const addPokemonAsync = (pokemon) => async (dispatch, getState) => {
+    const idToken = localStorage.getItem('idToken');
+    const localId = selectUserLocalId(getState());
     dispatch(fetchPokemons());
-    await Firebase.addPokemon(pokemon); 
-    const data = await Firebase.getPokemonsOnce();
-    dispatch(fetchPokemonsResolve(data.val()))
+    await fetch(`https://pokemon-game-7d203-default-rtdb.europe-west1.firebasedatabase.app/${localId}/pokemons.json?auth=${idToken}`, {
+        method: 'POST',
+        body: JSON.stringify(pokemon),
+    });
+    dispatch(getPokemonsAsync())
 }
 
 export default slice.reducer;
