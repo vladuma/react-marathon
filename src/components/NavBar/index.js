@@ -1,8 +1,16 @@
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { selectUserLoading, selectUserLocalId } from '../../store/user';
 import { ReactComponent as LoginSVG } from '../../assets/login.svg';
+import { ReactComponent as UserSVG } from '../../assets/user.svg';
 import style from './style.module.css';
 import cn from 'classnames';
 
 const NavBar = ({ isActive, handleNav, bgActive, onClickLogin }) => {
+    const isUserLoading = useSelector(selectUserLoading);
+    const localId = useSelector(selectUserLocalId);
+    console.log(localId, isUserLoading);
+
     return (
         <nav className={cn(style.root, bgActive ? style.bgActive : null)}>
             <div className={style.navWrapper}>
@@ -10,12 +18,20 @@ const NavBar = ({ isActive, handleNav, bgActive, onClickLogin }) => {
                     LOGO
                 </div>
                 <div className={style.loginAndMenu}>
-                    <div
-                        className={style.loginWrap}
-                        onClick={onClickLogin}
-                    >
-                        <LoginSVG />
-                    </div>
+                    {(!isUserLoading && !!localId) && (<Link
+                            className={style.loginWrap}
+                            to="/user"
+                        >
+                            <UserSVG />
+                        </Link>)
+                    }
+                    {(!isUserLoading && !localId) && (<div
+                            className={style.loginWrap}
+                            onClick={onClickLogin}
+                        >
+                            <LoginSVG />
+                        </div>)
+                    }
                     <div
                         className={cn(style.menuButton, { [style.active]: isActive })}
                         onClick={handleNav}

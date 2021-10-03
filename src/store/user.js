@@ -25,6 +25,7 @@ export const { fetchUser, updateUser, removeUser } = slice.actions;
 
 export const selectUserLoading = state => state.user.isLoading;
 export const selectUserData = state => state.user.data;
+export const selectUserLocalId = state => state.user.data?.localId;
 
 export const getUserAsync = () => async (dispatch) => {
     const idToken = localStorage.getItem('idToken');
@@ -43,7 +44,7 @@ export const getUserAsync = () => async (dispatch) => {
             dispatch(removeUser());
             localStorage.removeItem('idToken');
         } else {
-            dispatch(updateUser(response.data));
+            dispatch(updateUser(response.users[0]));
         }
     } else {
         dispatch(removeUser(idToken));
