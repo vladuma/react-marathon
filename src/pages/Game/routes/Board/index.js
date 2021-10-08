@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPokemonsSelected, setOpponentPokemons, setWonGame } from '../../../../store/game';
+import { selectPokemonsSelected, setOpponentPokemons, setGameResult } from '../../../../store/game';
 import PokemonCard from '../../../../components/PokemonCard';
 import Result from '../../../../components/Result';
 import ArrowChoice from '../../../../components/ArrowChoice';
@@ -33,24 +33,24 @@ const BoardPage = () => {
     const [choosenCard, setChoosenCard] = useState(null);
     const [result, setResult] = useState(null);
     const [side, setSide] = useState(0);
+    const [serverBoard, setServerBoard] = useState([0,0,0,0,0,0,0,0,0]);
 
     const handleBoardClick = async (position) => {
-        if (choosenCard) {
+        if (choosenCard && typeof choosenCard === 'object') {
             const params = {
-                position,
-                card: choosenCard,
-                board,
-            };
-            const { data: newBoard } = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+                currentPlayer: 'p1',
+                hands: {
+                    p1: player1,
+                    p2: player2,
                 },
-                body: JSON.stringify(params),
-            }).then(res => res.json());
-
-            setBoard(newBoard);
-            setSteps((steps) => steps + 1);
+                move: {
+                    poke: {
+                        ...choosenCard,
+                    },
+                    position,
+                },
+                board: serverBoard,
+            };
 
             if (choosenCard.player === 1) {
                 setPlayer1((prevState) => prevState.filter((item) => item.id !== choosenCard.id));
@@ -60,9 +60,74 @@ const BoardPage = () => {
                 setPlayer2((prevState) => prevState.filter((item) => item.id !== choosenCard.id));
             }
 
-            setSide(changeSide(side));
+            setBoard(prevState => prevState.map((item) => {
+                if (item.position === position) {
+                    return {
+                       ...item,
+                       card: choosenCard, 
+                    };
+                }
+
+                return item;
+            }));
+            
+            const game = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/game', {
+                method: 'POST',
+                body: JSON.stringify(params),
+            }).then(res => res.json());
+
             setChoosenCard(null);
+
+            setBoard(converBoard(game.oldBoard))
+
+            setSide((prevState) => changeSide(prevState));
+
+            setSteps((steps) => steps + 1);
+
+            if (game.move !== null) {
+
+                setTimeout(() => {
+                    const idAi = game.move.poke.id;
+                    
+                    setPlayer2(prevState => prevState.map((item) => {
+                        if ( item.id === idAi ) {
+                            return {
+                                ...item,
+                                active: true,
+                            };
+                        }
+                        
+                        return item;
+                    }));
+                }, 1000);
+
+                setTimeout(() => {
+                    setServerBoard(game.board);
+                    setPlayer2(() => game.hands.p2.pokes.map((item) => item.poke));
+                    setBoard(converBoard(game.board));
+                    setSide((prevState) => changeSide(prevState));
+                    setSteps((steps) => steps + 1);
+                }, 1500);
+            }
+
         }
+    };
+
+    const converBoard = (serverBoard) => {
+        return serverBoard.map((item, index) => {
+            let card = null;
+            if (typeof item === 'object') {
+                card = {
+                    ...item.poke,
+                    posession: item.holder === 'p1' ? 'blue' : 'red',
+                };
+            }
+
+            return {
+                position: index + 1,
+                card,
+            };
+        })
     };
 
     const handleChoosenCard = (card) => {
@@ -86,19 +151,72 @@ const BoardPage = () => {
 
     useEffect(() => {
         async function getBoard() {
-            const { data } = await fetch('https://reactmarathon-api.netlify.app/api/board').then(res => res.json());
+            const { data } = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/board').then(res => res.json());
             setBoard(data);
             return data;
         }
         async function getPlayer2() {
-            const { data } = await fetch('https://reactmarathon-api.netlify.app/api/create-player').then(res => res.json());
+            const options = {
+                method: 'POST',
+                body: JSON.stringify({
+                    pokemons: Object.values(pokemons),
+                }),
+            };
+            const { data } = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/game/start', options).then(res => res.json());
             dispatch(setOpponentPokemons(data));
             setPlayer2(setItemsPossession(data, 'red'));
             return data;
         }
 
-        Promise.allSettled([getBoard(), getPlayer2()]).then(() => {
-            setTimeout((() => setSide(getRandomSide())), 1000);
+        Promise.allSettled([getBoard(), getPlayer2()]).then((res) => {
+            const [, p2] = res;
+            setTimeout(async () => {
+                const randomSide = getRandomSide();
+                setSide(randomSide);
+                if (randomSide === 2) {
+                    const params = {
+                        currentPlayer: 'p2',
+                        hands: {
+                            p1: player1,
+                            p2: setItemsPossession(p2.value, 'red'),
+                        },
+                        move: null,
+                        board: serverBoard,
+                    };
+
+                    const game = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/game', {
+                        method: 'POST',
+                        body: JSON.stringify(params),
+                    }).then(res => res.json());
+                    console.log(game);
+                    if (game.move && game.move !== null) {
+                        setSide(changeSide(side));
+        
+                        setTimeout(() => {
+                            const idAi = game.move.poke.id;
+                            
+                            setPlayer2(prevState => prevState.map((item) => {
+                                if ( item.id === idAi ) {
+                                    return {
+                                        ...item,
+                                        active: true,
+                                    };
+                                }
+                                
+                                return item;
+                            }));
+                        }, 1000);
+        
+                        setTimeout(() => {
+                            setServerBoard(game.board);
+                            setPlayer2(() => game.hands.p2.pokes.map((item) => item.poke));
+                            setBoard(converBoard(game.board));
+                            setSide(changeSide(side));
+                            setSteps((steps) => steps + 1);
+                        }, 1500);
+                    }
+                }
+            }, 1000);
         });
         // eslint-disable-next-line 
     }, []);
@@ -106,24 +224,20 @@ const BoardPage = () => {
     useEffect(() => {
         if ( steps === 9) {
             const [player1Count, player2Count] = winCounter(board, player1, player2);
-            console.log(player1Count, player2Count);
             const types = {
                 [player1Count > player2Count]: 'win',
                 [player1Count === player2Count]: 'draw',
                 [player1Count < player2Count]: 'lose',
             };
-            console.log(types);
-            console.log(types[true]);
+
             const type = types[true];
 
             setResult(<Result type={type} />);
             
-            if (type === 'win') {
-                dispatch(setWonGame());
-                setTimeout(() => history.push('/game/finish'), 2500);
-            }
+            dispatch(setGameResult(type));
+            setTimeout(() => history.push('/game/finish'), 2500);
         } // eslint-disable-next-line 
-    }, [steps]); 
+    }, [steps, board, player1, player2]); 
 
     if (Object.keys(pokemons).length === 0) {
         history.replace('/game');

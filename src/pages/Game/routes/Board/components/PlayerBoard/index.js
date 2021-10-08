@@ -12,7 +12,7 @@ const PlayerBoard = ({ player, cards, onCardClick, side }) => {
                     <div
                         key={item.id}
                         className={cn(style.cardBoard, {
-                            [style.selected]: isSelected === item.id,
+                            [style.selected]: isSelected === item.id || item.active,
                         })}
                         onClick={() => {
                             if (player === side) {
