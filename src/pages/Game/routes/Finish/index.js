@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom';
 import PokemonCard from '../../../../components/PokemonCard';
 import Layout from '../../../../components/Layout';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPokemonsSelected, selectOpponentPokemons, selectOpponentPokemonsSelected, setSelectedOpponentPokemons } from '../../../../store/game';
+import { selectPokemonsSelected, selectOpponentPokemons, selectOpponentPokemonsSelected, setSelectedOpponentPokemons, selectGameResult } from '../../../../store/game';
 import { addPokemonAsync } from '../../../../store/pokemons';
 import cn from 'classnames';
 import style from './style.module.css';
@@ -13,14 +13,15 @@ const FinishPage = () => {
     const pokemons = useSelector(selectPokemonsSelected);
     const opponentPokemons = useSelector(selectOpponentPokemons);
     const selectedOpponentPokemon = useSelector(selectOpponentPokemonsSelected);
+    const gameResult = useSelector(selectGameResult);
     const handleOpponentCardSelected = (id) => {
         dispatch(setSelectedOpponentPokemons(id));
     };
     const handleEndGame = async () => {
         if (selectedOpponentPokemon) {
             dispatch(addPokemonAsync(selectedOpponentPokemon));
-            history.push('/game');
         }
+        history.push('/game');
     };
     if (Object.keys(pokemons).length === 0 || opponentPokemons.length === 0) {
         history.replace('/game');
@@ -59,7 +60,7 @@ const FinishPage = () => {
                             img={item.img}
                             isActive
                             className={selectedOpponentPokemon && item.id === selectedOpponentPokemon.id ? style.selected : ''}
-                            handleChangeSelected={() => handleOpponentCardSelected(item.id)}
+                            handleChangeSelected={() => gameResult === 'win' && handleOpponentCardSelected(item.id)}
                         />
                     ))
                 }
